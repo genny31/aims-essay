@@ -1,8 +1,16 @@
 
 ---
-title: "Untitled"
+title: "Research Work"
 output: html_document
 ---
+#####################################################################
+
+Project: Using Non-Standard Regression Methods for Evaluating Data
+Scrip purpose: 
+Date:   January,2019
+Author: Prof. Ring Arne & Genevieve N. Mensah
+
+######################################################################
 
 ```{r}
 library(mcr) 
