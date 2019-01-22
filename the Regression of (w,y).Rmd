@@ -1,0 +1,75 @@
+---
+title: "Untitled"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+```{r}
+Intercept<- 5
+slope <- 3
+sigma_y <- 20
+sigma_x <- 10
+number_of_simulations <- 1000
+
+#initialize a data frame to collect results
+dataframe <- data.frame(matrix(ncol = 3, nrow = number_of_simulations))
+colnames(dataframe) <- c('Intercept', 'Slope','Error')
+
+for(i in 1:number_of_simulations)
+  {
+  
+   x <- rnorm(1000)
+   Error <- rnorm(1000,0,sigma_y)
+   Error_x <- rnorm(1000,0,sigma_x)
+   w <- x + Error_x
+   y <- Intercept + slope*x
+   z <- y  + Error
+  
+#collect results from the itter
+  dataframe[i,] <- data.frame(t(lm(y ~ w)$coeff)) 
+  
+  }
+
+
+head(dataframe)
+
+library(ggplot2)
+
+# Estimated values
+
+   x <- rnorm(1000)
+   Error <- rnorm(1000,0,sigma_y)
+   Error_x <- rnorm(1000,0,sigma_x)
+   w <- x + Error_x
+   y <- Intercept + slope*x
+   z <- y  + Error
+   
+data_created = data.frame(cbind(w,y))
+
+plot(data_created$w, data_created$y,type="n", main = "The Regression of (W,Y)",xlab = "Y - Variable ", ylab = "W - Variable ")
+
+
+# simulation of the estimated values of the slope and intercept
+for (i in 1:1000) {
+  
+    x <- rnorm(1000)
+   Error <- rnorm(1000,0,sigma_y)
+   Error_x <- rnorm(1000,0,sigma_x)
+   w <- x + Error_x
+   y <- Intercept + slope*x
+   z <- y  + Error
+  
+ data_created = data.frame(cbind(w,y))
+  
+ abline(lm(data_created$y~data_created$w), col = "red")
+
+ 
+ abline(lm(y~x),col="blue")
+}
+
+
+
+```
+

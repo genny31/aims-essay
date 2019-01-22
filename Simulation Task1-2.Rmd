@@ -1,0 +1,66 @@
+---
+title: "Assig"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r}
+
+Intercept<- 2.5
+slope <- 1.5
+sigma_y <- 2
+number_of_simulations <- 1000
+
+#initialize a data frame to collect results
+dataframe <- data.frame(matrix(ncol = 3, nrow = number_of_simulations))
+colnames(dataframe) <- c('Intercept', 'Slope','Error')
+
+for(i in 1:number_of_simulations){
+  
+   x <- rnorm(1000)
+   Error <- rnorm(1000,0,sigma_y)
+   y <- Intercept + slope*x
+   z <- y  + Error
+  
+#collect results from the itter
+  dataframe[i,] <- data.frame(t(lm(z ~ x )$coeff))
+}
+
+
+head(dataframe)
+
+library(ggplot2)
+
+# Estimated values
+
+   x <- rnorm(1000)
+   Error <- rnorm(1000,0,sigma_y)
+   y <- Intercept + slope*x
+   z <- y  + Error
+
+data_created = data.frame(cbind(x,z))
+
+plot(data_created$x, data_created$z, type="n",main = " Fig 5: decrease in slope and intercept; sigma constant", 
+    xlab = "X - Variable ", ylab = "Z - Variable ", pch = 21)
+
+
+# simulation of the estimated values of the slope and intercept
+for (i in 1:1000) {
+  
+   x <- rnorm(1000)
+   Error <- rnorm(1000,0,sigma_y)
+   y <- Intercept + slope*x
+   z <- y  + Error
+  
+ data_created = data.frame(cbind(x,z))
+ model <- lm(data_created$z~data_created$x)
+  
+ abline(model, col = "red")
+
+ 
+ abline(lm(y~x),col="blue")
+  }
+summary(model)
+```
+

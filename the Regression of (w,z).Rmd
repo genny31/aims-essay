@@ -1,0 +1,74 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+
+```{r}
+Intercept<- 2.5
+slope <-1.5
+sigma_y <- 2
+sigma_x <- 2
+number_of_simulations <- 1000
+
+#initialize a data frame to collect results
+dataframe <- data.frame(matrix(ncol = 3, nrow = number_of_simulations))
+colnames(dataframe) <- c('Intercept', 'Slope','Error')
+
+for(i in 1:number_of_simulations)
+  {
+  
+   x <- rnorm(1000)
+   Error <- rnorm(10,0,sigma_y)
+   Error_x <- rnorm(10,0,sigma_x)
+   w <- x + Error_x
+   y <- Intercept + slope*x
+   z <- y  + Error
+  
+#collect results from the itter
+  dataframe[i,] <- data.frame(t(lm(z ~ w)$coeff)) 
+  
+  }
+
+
+head(dataframe)
+
+library(ggplot2)
+
+# Estimated values
+
+   x <- rnorm(1000)
+   Error <- rnorm(10,0,sigma_y)
+   Error_x <- rnorm(10,0,sigma_x)
+   w <- x + Error_x
+   y <- Intercept + slope*x
+   z <- y  + Error
+   
+data_created = data.frame(cbind(w,z))
+
+plot(data_created$w, data_created$z,type="n", main = " The Regression of (W,Z)",xlab = "Z - Variable ", ylab = "W - Variable ")
+
+
+# simulation of the estimated values of the slope and intercept
+for (i in 1:1000) {
+  
+    x <- rnorm(1000)
+   Error <- rnorm(10,0,sigma_y)
+   Error_x <- rnorm(10,0,sigma_x)
+   w <- x + Error_x
+   y <- Intercept + slope*x
+   z <- y  + Error
+  
+ data_created = data.frame(cbind(w,z))
+  model2<-lm(data_created$z~data_created$w)
+  demr<-mcreg(data_created$w, data_created$z,method.reg = "Deming")
+ abline(model2, col = "red")
+
+ 
+ abline(lm(y~x),col="blue")
+}
+plot(demr,type="n")
+getCoefficients(demr)
+summary(model2)
+```
+
